@@ -1,86 +1,103 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <title>En vigtig besked 💌</title>
-    <style>
-        body {
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
-            font-family: Arial, sans-serif;
-            text-align: center;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<title>En vigtig besked 💌</title>
 
-        h1 {
-            font-size: 2.5rem;
-            color: white;
-        }
+<style>
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #ffe6f0;
+    margin: 0;
+    overflow: hidden;
+}
 
-        .buttons {
-            margin-top: 30px;
-        }
+.container {
+    margin-top: 100px;
+}
 
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin: 10px;
-            transition: 0.3s;
-        }
+h1 {
+    font-size: 40px;
+}
 
-        #yesBtn {
-            background-color: #4CAF50;
-            color: white;
-        }
+button {
+    padding: 15px 30px;
+    font-size: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+}
 
-        #noBtn {
-            background-color: #ff4d4d;
-            color: white;
-            position: absolute;
-        }
+#yesBtn {
+    background-color: #ff4da6;
+    color: white;
+}
 
-        #message {
-            margin-top: 20px;
-            font-size: 24px;
-            color: white;
-        }
-    </style>
+#noBtn {
+    background-color: #cccccc;
+    position: absolute;
+}
+</style>
 </head>
+
 <body>
 
-    <h1>Vil du på date med mig i denne uge? 💖</h1>
+<div class="container">
+    <h1>Vil du på date med mig? 💖</h1>
+    <button id="yesBtn">JA 💘</button>
+    <button id="noBtn">Nej...</button>
+</div>
 
-    <div class="buttons">
-        <button id="yesBtn">JA 💕</button>
-        <button id="noBtn">NEJ 😅</button>
-    </div>
+<script>
+let noCount = 0;
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
 
-    <div id="message"></div>
+function moveNoButton() {
+    const maxX = window.innerWidth - noBtn.offsetWidth;
+    const maxY = window.innerHeight - noBtn.offsetHeight;
 
-    <script>
-        const noBtn = document.getElementById("noBtn");
-        const yesBtn = document.getElementById("yesBtn");
-        const message = document.getElementById("message");
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
 
-        noBtn.addEventListener("mouseover", function() {
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 50);
-            noBtn.style.left = x + "px";
-            noBtn.style.top = y + "px";
-        });
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+}
 
-        yesBtn.addEventListener("click", function() {
-            message.innerHTML = "YAAAAAY 😍 Jeg glæder mig til vores date! Ring 60 74 91 40...";
-        });
-    </script>
+noBtn.addEventListener("mouseover", function() {
+    noCount++;
+
+    // Gør JA større
+    let currentSize = window.getComputedStyle(yesBtn).fontSize;
+    let newSize = parseFloat(currentSize) + 8;
+    yesBtn.style.fontSize = newSize + "px";
+    yesBtn.style.padding = (newSize) + "px " + (newSize * 2) + "px";
+
+    // Flyt NEJ
+    moveNoButton();
+
+    // Efter 5 forsøg bliver den helt umulig
+    if (noCount > 5) {
+        noBtn.style.display = "none";
+    }
+});
+
+yesBtn.addEventListener("click", function() {
+    document.body.innerHTML = `
+        <div style="margin-top: 200px;">
+            <h1>YAAAY!!! 💕</h1>
+            <p>Jeg glæder mig helt vildt 😍</p>
+        </div>
+    `;
+});
+
+// Start med at placere NEJ et tilfældigt sted
+moveNoButton();
+</script>
 
 </body>
 </html>
