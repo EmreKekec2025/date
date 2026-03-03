@@ -29,7 +29,6 @@ button {
     border-radius: 10px;
     cursor: pointer;
     transition: 0.2s;
-    position: relative;
 }
 
 #yesBtn {
@@ -39,7 +38,12 @@ button {
 
 #noBtn {
     background-color: #cccccc;
-    position: absolute;
+    position: relative;
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 20px;
 }
 </style>
 </head>
@@ -47,15 +51,25 @@ button {
 <body>
 
 <div class="container">
-    <h1>Vil du på date med mig? 💖</h1>
-    <button id="yesBtn">JA 💘</button>
+    <h1>Vil du på date med mig? 🤪</h1>
+    <button id="yesBtn">JA 🙃</button>
     <button id="noBtn">Nej...</button>
+    <p id="message"></p>
 </div>
 
 <script>
 let noCount = 0;
+let runawayMode = false;
+
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+
+const noTexts = [
+    "Er du sikker?",
+    "Helt sikker? 😅",
+    "Tænk lige en ekstra gang..."
+];
 
 function moveNoButton() {
     const maxX = window.innerWidth - noBtn.offsetWidth;
@@ -64,39 +78,49 @@ function moveNoButton() {
     const randomX = Math.random() * maxX;
     const randomY = Math.random() * maxY;
 
+    noBtn.style.position = "absolute";
     noBtn.style.left = randomX + "px";
     noBtn.style.top = randomY + "px";
 }
 
+noBtn.addEventListener("click", function() {
+
+    if (!runawayMode) {
+        if (noCount < noTexts.length) {
+            message.textContent = noTexts[noCount];
+            noCount++;
+
+            // Gør JA større
+            let currentSize = window.getComputedStyle(yesBtn).fontSize;
+            let newSize = parseFloat(currentSize) + 6;
+            yesBtn.style.fontSize = newSize + "px";
+            yesBtn.style.padding = (newSize) + "px " + (newSize * 2) + "px";
+
+        }
+
+        if (noCount === 3) {
+            runawayMode = true;
+            message.textContent = "Okay okay... prøv at trykke nej igen 😏";
+        }
+
+    }
+});
+
+// Når runawayMode er aktiv, flytter den sig ved hover
 noBtn.addEventListener("mouseover", function() {
-    noCount++;
-
-    // Gør JA større
-    let currentSize = window.getComputedStyle(yesBtn).fontSize;
-    let newSize = parseFloat(currentSize) + 8;
-    yesBtn.style.fontSize = newSize + "px";
-    yesBtn.style.padding = (newSize) + "px " + (newSize * 2) + "px";
-
-    // Flyt NEJ
-    moveNoButton();
-
-    // Efter 5 forsøg bliver den helt umulig
-    if (noCount > 5) {
-        noBtn.style.display = "none";
+    if (runawayMode) {
+        moveNoButton();
     }
 });
 
 yesBtn.addEventListener("click", function() {
     document.body.innerHTML = `
         <div style="margin-top: 200px;">
-            <h1>YAAAY!!! 💕</h1>
-            <p>Jeg glæder mig helt vildt 😍</p>
+            <h1>Det vidste jeg godt 🤫</h1>
+            <p>Du synes jeg er sød 😎</p>
         </div>
     `;
 });
-
-// Start med at placere NEJ et tilfældigt sted
-moveNoButton();
 </script>
 
 </body>
